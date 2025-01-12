@@ -1,4 +1,4 @@
-# MyRead
+# PyBrowser
 
 A Web Application to Track Your Book Reading Progress. Search and Add the books you wish to read in your very own list maintained under your email account.
 

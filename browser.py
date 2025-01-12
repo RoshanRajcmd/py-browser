@@ -41,29 +41,30 @@ class MainWindow(QMainWindow):
 		
         #customizing  the toolbare with rounded style
 		navtb.setStyleSheet("""
-            QToolBar{
-                background-color: #5C6BC0;
-                border-radius: 10px;
-                font-size: 14px;
-                padding: 5px;
-            }
-            QToolButton{
-                background-color: #3F51B5;
-                color: white;
-                border-radius: 8px;
-                padding: 8px;
-            }
-            QToolButton:hover{
-                background-color: #1E88E5;
-            }
-        """)
+			QToolBar{
+				background-color: #31302f;
+				font-size: 14px;
+				padding: 8px;
+			}
+			QToolButton{
+				background-color: white;
+				color: white;
+				border-radius: 8px;
+				width: 20px;
+				height: 20px;
+				margin: 0 5px;  # Adding uniform spacing between buttons
+			}
+			QToolButton:hover{
+				background-color: #3e3d3c;
+			}
+		""")
 
 		# adding this tool bar tot he main window
 		self.addToolBar(navtb)
 
 		# adding actions to the tool bar
 		# creating a action for back
-		back_btn = QAction(QIcon('icons/backward.png'),"Back", self)
+		back_btn = QAction(QIcon('icons/backward_black.png'),"Back", self)
 		# setting status tip
 		back_btn.setStatusTip("Back to previous page")
 		# adding action to the back button
@@ -73,22 +74,28 @@ class MainWindow(QMainWindow):
 		navtb.addAction(back_btn)
 
 		# similarly for forward action
-		next_btn = QAction(QIcon('icons/forward.png'),"Forward", self)
+		next_btn = QAction(QIcon('icons/forward_black.png'),"Forward", self)
 		next_btn.setStatusTip("Forward to next page")
 		next_btn.triggered.connect(self.browser.forward)
 		navtb.addAction(next_btn)
 
 		# similarly for reload action
-		reload_btn = QAction(QIcon('icons/forward.png'),"Reload", self)
+		reload_btn = QAction(QIcon('icons/reload_black.png'),"Reload", self)
 		reload_btn.setStatusTip("Reload page")
 		reload_btn.triggered.connect(self.browser.reload)
 		navtb.addAction(reload_btn)
 
 		# similarly for home action
-		home_btn = QAction(QIcon('icons/forward.png'),"Home", self)
+		home_btn = QAction(QIcon('icons/home_black.png'),"Home", self)
 		home_btn.setStatusTip("Go home")
 		home_btn.triggered.connect(self.navigate_home)
 		navtb.addAction(home_btn)
+
+		# adding stop action to the tool bar
+		stop_btn = QAction("X", self)
+		stop_btn.setStatusTip("Stop loading current page")
+		stop_btn.triggered.connect(self.browser.stop)
+		navtb.addAction(stop_btn)
 
 		# adding a separator in the tool bar
 		navtb.addSeparator()
@@ -99,7 +106,7 @@ class MainWindow(QMainWindow):
 		#styling the URL bar
 		self.urlbar.setStyleSheet("""
 			QLineEdit{
-				border-radius: 15px;
+				border-radius: 13px;
 				padding: 5px;
 				background-color: white;
 				font-size: 14px;
@@ -116,11 +123,15 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		navtb.addWidget(self.urlbar)
 
-		# adding stop action to the tool bar
-		stop_btn = QAction(QIcon('icons/forward.png'),"Stop", self)
-		stop_btn.setStatusTip("Stop loading current page")
-		stop_btn.triggered.connect(self.browser.stop)
-		navtb.addAction(stop_btn)
+		bookmark_btn = QAction(QIcon('icons/bookmark_black'),"Bookmark Page", self)
+		bookmark_btn.setStatusTip("Bookmark Page")
+		#bookmark_btn.triggered.connect(self.navigate_home)
+		navtb.addAction(bookmark_btn)
+
+		actions_btn = QAction(QIcon('icons/bookmark_black'),"More Actions", self)
+		actions_btn.setStatusTip("More Action")
+		#actions_btn.triggered.connect(self.navigate_home)
+		navtb.addAction(actions_btn)
 
 		# showing all the components
 		self.show()
