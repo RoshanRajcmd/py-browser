@@ -14,13 +14,13 @@ class MainWindow(QMainWindow):
 		# creating a QTabWidget
 		self.tabs = QTabWidget()
 		self.tabs.setDocumentMode(True)
-		self.tabs.tabBarDoubleClicked.connect(self.tab_open_doubleclick)
-		self.tabs.currentChanged.connect(self.current_tab_changed)
+		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
+		self.tabs.currentChanged.connect(self.currentTabChanged)
 		self.tabs.setTabsClosable(True)
-		self.tabs.tabCloseRequested.connect(self.close_current_tab)
+		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
 
 		# creating a new tab
-		self.add_new_tab(QUrl('http://google.com'), 'Homepage')
+		self.addNewTab(QUrl('http://google.com'), 'Homepage')
 
 		# set this tabs as central widget or main window
 		self.setCentralWidget(self.tabs)
@@ -32,45 +32,45 @@ class MainWindow(QMainWindow):
 		self.setStatusBar(self.status)
 
 		# creating QToolBar for navigation
-		navtb = QToolBar("Navigation")
+		navBar = QToolBar("Navigation")
 
 		# adding actions to the tool bar
 		# creating a action for back
-		back_btn = QAction(QIcon('icons/backward_black.png'),"Back", self)
+		backBtn = QAction(QIcon('icons/backward_black.png'),"Back", self)
 		# setting status tip
-		back_btn.setStatusTip("Back to previous page")
+		backBtn.setStatusTip("Back to previous page")
 		# adding action to the back button
 		# making browser go back
-		back_btn.triggered.connect(lambda: self.tabs.currentWidget().back())
+		backBtn.triggered.connect(lambda: self.tabs.currentWidget().back())
 		# adding this action to tool bar
-		navtb.addAction(back_btn)
+		navBar.addAction(backBtn)
 
 		# similarly for forward action
-		next_btn = QAction(QIcon('icons/forward_black.png'),"Forward", self)
-		next_btn.setStatusTip("Forward to next page")
-		next_btn.triggered.connect(lambda: self.tabs.currentWidget().forward())
-		navtb.addAction(next_btn)
+		nextBtn = QAction(QIcon('icons/forward_black.png'),"Forward", self)
+		nextBtn.setStatusTip("Forward to next page")
+		nextBtn.triggered.connect(lambda: self.tabs.currentWidget().forward())
+		navBar.addAction(nextBtn)
 
 		# similarly for reload action
-		reload_btn = QAction(QIcon('icons/reload_black.png'),"Reload", self)
-		reload_btn.setStatusTip("Reload page")
-		reload_btn.triggered.connect(lambda: self.tabs.currentWidget().reload())
-		navtb.addAction(reload_btn)
+		reloadBtn = QAction(QIcon('icons/reload_black.png'),"Reload", self)
+		reloadBtn.setStatusTip("Reload page")
+		reloadBtn.triggered.connect(lambda: self.tabs.currentWidget().reload())
+		navBar.addAction(reloadBtn)
 
 		# similarly for home action
-		home_btn = QAction(QIcon('icons/home_black.png'),"Home", self)
-		home_btn.setStatusTip("Go home")
-		home_btn.triggered.connect(self.navigate_home)
-		navtb.addAction(home_btn)
+		homeBtn = QAction(QIcon('icons/home_black.png'),"Home", self)
+		homeBtn.setStatusTip("Go home")
+		homeBtn.triggered.connect(self.navigate_home)
+		navBar.addAction(homeBtn)
 
 		# adding stop action to the tool bar
-		stop_btn = QAction("X", self)
-		stop_btn.setStatusTip("Stop loading current page")
-		stop_btn.triggered.connect(lambda: self.tabs.currentWidget().stop())
-		navtb.addAction(stop_btn)
+		stopBtn = QAction("X", self)
+		stopBtn.setStatusTip("Stop loading current page")
+		stopBtn.triggered.connect(lambda: self.tabs.currentWidget().stop())
+		navBar.addAction(stopBtn)
 
 		# adding a separator in the tool bar
-		navtb.addSeparator()
+		navBar.addSeparator()
 
 		# creating a line edit for the url
 		self.urlbar = QLineEdit(self)
@@ -90,29 +90,29 @@ class MainWindow(QMainWindow):
 		""")
 
 		# adding action when return key is pressed
-		self.urlbar.returnPressed.connect(self.navigate_to_url)
+		self.urlbar.returnPressed.connect(self.navigateToUrl)
 
 		# adding this to the tool bar
-		navtb.addWidget(self.urlbar)
+		navBar.addWidget(self.urlbar)
 
 		# creating a action for new tab
 		# new_tab_btn = QAction(QIcon('icons/new_tab.png'), "New Tab", self)
 		# new_tab_btn.setStatusTip("Open a new tab")
-		# new_tab_btn.triggered.connect(lambda _: self.add_new_tab())
-		# navtb.addAction(new_tab_btn)
+		# new_tab_btn.triggered.connect(lambda _: self.addNewTab())
+		# navBar.addAction(new_tab_btn)
 
-		bookmark_btn = QAction(QIcon('icons/bookmark_black'),"Bookmark Page", self)
-		bookmark_btn.setStatusTip("Bookmark Page")
-		#bookmark_btn.triggered.connect(self.navigate_home)
-		navtb.addAction(bookmark_btn)
+		bookmarkBtn = QAction(QIcon('icons/bookmark_black'),"Bookmark Page", self)
+		bookmarkBtn.setStatusTip("Bookmark Page")
+		#bookmarkBtn.triggered.connect(self.bookmarkPage)
+		navBar.addAction(bookmarkBtn)
 
-		actions_btn = QAction(QIcon('icons/bookmark_black'),"More Actions", self)
-		actions_btn.setStatusTip("More Action")
-		#actions_btn.triggered.connect(self.navigate_home)
-		navtb.addAction(actions_btn)
+		actionBtn = QAction(QIcon('icons/bookmark_black'),"More Actions", self)
+		actionBtn.setStatusTip("More Action")
+		#actionBtn.triggered.connect(self.openActions)
+		navBar.addAction(actionBtn)
 		
                 #customizing  the toolbare with rounded style
-		navtb.setStyleSheet("""
+		navBar.setStyleSheet("""
 			QToolBar{
 				background-color: #31302f;
 				font-size: 14px;
@@ -132,12 +132,12 @@ class MainWindow(QMainWindow):
 		""")
 
 		# adding this tool bar tot he main window
-		self.addToolBar(navtb)
+		self.addToolBar(navBar)
 
 		# showing all the components
 		self.show()
 
-	def add_new_tab(self, qurl=None, label="Blank"):
+	def addNewTab(self, qurl=None, label="Blank"):
 		if qurl is None:
 			qurl = QUrl('')
 
@@ -146,25 +146,25 @@ class MainWindow(QMainWindow):
 		i = self.tabs.addTab(browser, label)
 		self.tabs.setCurrentIndex(i)
 
-		browser.urlChanged.connect(lambda qurl, browser=browser: self.update_urlbar(qurl, browser))
+		browser.urlChanged.connect(lambda qurl, browser=browser: self.updateUrlBar(qurl, browser))
 		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.tabs.setTabText(i, browser.page().title()))
 
-	def tab_open_doubleclick(self, i):
+	def tabOpenDoubleClick(self, i):
 		if i == -1:
-			self.add_new_tab()
+			self.addNewTab()
 
-	def current_tab_changed(self, i):
+	def currentTabChanged(self, i):
 		qurl = self.tabs.currentWidget().url()
-		#self.update_urlbar(qurl, self.tabs.currentWidget())
-		self.update_title()
+		#self.updateUrlBar(qurl, self.tabs.currentWidget())
+		self.updateTitle()
 
-	def close_current_tab(self, i):
+	def closeCurrentTab(self, i):
 		if self.tabs.count() < 2:
 			return
 		self.tabs.removeTab(i)
 
 	# method for updating the title of the window
-	def update_title(self):
+	def updateTitle(self):
 		title = self.tabs.currentWidget().page().title()
 		self.setWindowTitle("% s - Py Browser" % title)
 
@@ -173,7 +173,7 @@ class MainWindow(QMainWindow):
 		self.tabs.currentWidget().setUrl(QUrl("http://www.google.com"))
 
 	# method called by the line edit when return key is pressed
-	def navigate_to_url(self):
+	def navigateToUrl(self):
 		q = QUrl(self.urlbar.text())
 		if q.scheme() == "":
 			q.setScheme("http")
@@ -181,7 +181,7 @@ class MainWindow(QMainWindow):
 
 	# method for updating url
 	# this method is called by the QWebEngineView object
-	def update_urlbar(self, q, browser=None):
+	def updateUrlBar(self, q, browser=None):
 		if browser != self.tabs.currentWidget():
 			return
 		self.urlbar.setText(q.toString())
