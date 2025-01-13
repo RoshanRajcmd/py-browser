@@ -124,12 +124,6 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		navBar.addWidget(self.urlBar)
 
-		# creating a action for new tab
-		# new_tab_btn = QAction(QIcon('icons/new_tab.png'), "New Tab", self)
-		# new_tab_btn.setStatusTip("Open a new tab")
-		# new_tab_btn.triggered.connect(lambda _: self.addNewTab())
-		# navBar.addAction(new_tab_btn)
-
 		bookmarkBtn = QAction(QIcon('icons/bookmark_black'),"Bookmark Page", self)
 		bookmarkBtn.setStatusTip("Bookmark Page")
 		#bookmarkBtn.triggered.connect(self.bookmarkPage)
@@ -165,12 +159,9 @@ class MainWindow(QMainWindow):
 		# showing all the components
 		self.show()
 
-	def tabOpenDoubleClick(self, i):
-		if i == -1:
-			self.addNewTab()
-
 	def closeCurrentTab(self, i):
 		if self.tabs.count() < 2:
+			self.close()
 			return
 		self.tabs.removeTab(i)
 
