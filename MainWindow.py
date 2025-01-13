@@ -4,6 +4,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl
 import os
 
+NEW_TAB_DEFAULT_URL = "http://www.google.com"
+HOME_URL = "http://www.google.com"
+
 # creating main window class
 class MainWindow(QMainWindow):
 
@@ -60,7 +63,7 @@ class MainWindow(QMainWindow):
 		# similarly for home action
 		homeBtn = QAction(QIcon('icons/home_black.png'),"Home", self)
 		homeBtn.setStatusTip("Go home")
-		homeBtn.triggered.connect(self.navigate_home)
+		homeBtn.triggered.connect(self.navigateHome)
 		navBar.addAction(homeBtn)
 
 		# adding stop action to the tool bar
@@ -111,7 +114,7 @@ class MainWindow(QMainWindow):
 		#actionBtn.triggered.connect(self.openActions)
 		navBar.addAction(actionBtn)
 		
-                #customizing  the toolbare with rounded style
+        #customizing  the toolbare with rounded style
 		navBar.setStyleSheet("""
 			QToolBar{
 				background-color: #31302f;
@@ -119,15 +122,14 @@ class MainWindow(QMainWindow):
 				padding: 3px;
 			}
 			QToolButton{
-				background-color: white;
-				color: white;
+				background-color: #white;
 				border-radius: 8px;
-				width: 20px;
-				height: 20px;
-				margin: 0 5px;  # Adding uniform spacing between buttons
+				width: 25px;
+				height: 25px;
+				margin: 0 5px;
 			}
 			QToolButton:hover{
-				background-color: #3e3d3c;
+				background-color: #ECEFF1;
 			}
 		""")
 
@@ -137,9 +139,18 @@ class MainWindow(QMainWindow):
 		# showing all the components
 		self.show()
 
+	def tabOpenDoubleClick(self, i):
+		if i == -1:
+			self.addNewTab()
+
+	def closeCurrentTab(self, i):
+		if self.tabs.count() < 2:
+			return
+		self.tabs.removeTab(i)
+
 	def addNewTab(self, qurl=None, label="Blank"):
 		if qurl is None:
-			qurl = QUrl('')
+			qurl = QUrl(NEW_TAB_DEFAULT_URL)
 
 		browser = QWebEngineView()
 		browser.setUrl(qurl)
@@ -148,29 +159,36 @@ class MainWindow(QMainWindow):
 
 		browser.urlChanged.connect(lambda qurl, browser=browser: self.updateUrlBar(qurl, browser))
 		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.tabs.setTabText(i, browser.page().title()))
-
-	def tabOpenDoubleClick(self, i):
-		if i == -1:
-			self.addNewTab()
+		self.updateTitle()
 
 	def currentTabChanged(self, i):
 		qurl = self.tabs.currentWidget().url()
-		#self.updateUrlBar(qurl, self.tabs.currentWidget())
+		print("new URL: %s" % qurl)
+		self.updateUrlBar(qurl, self.tabs.currentWidget())
 		self.updateTitle()
-
-	def closeCurrentTab(self, i):
-		if self.tabs.count() < 2:
-			return
-		self.tabs.removeTab(i)
 
 	# method for updating the title of the window
 	def updateTitle(self):
+		# TODO - sometimes the page does not have a title when the app initialy started and when a new tab
+		# TODO - the title gets updated only after you gone to the next page
 		title = self.tabs.currentWidget().page().title()
+		print("Titile: %s\n" % title)
 		self.setWindowTitle("% s - Py Browser" % title)
 
+	# method for updating url
+	# this method is called by the QWebEngineView object
+	def updateUrlBar(self, q, browser=None):
+		if browser != self.tabs.currentWidget():
+			return
+		# TODO - The urlbar is not getting recognized as variable in the MainWindow
+		#self.urlbar.setText(q)
+		#self.urlbar.setText(str(q))
+		#self.urlbar.setCursorPosition(0)
+		
 	# method called by the home action
-	def navigate_home(self):
-		self.tabs.currentWidget().setUrl(QUrl("http://www.google.com"))
+	def navigateHome(self):
+		self.tabs.currentWidget().setUrl(QUrl(HOME_URL))
+		self.updateTitle()
 
 	# method called by the line edit when return key is pressed
 	def navigateToUrl(self):
@@ -178,11 +196,3 @@ class MainWindow(QMainWindow):
 		if q.scheme() == "":
 			q.setScheme("http")
 		self.tabs.currentWidget().setUrl(q)
-
-	# method for updating url
-	# this method is called by the QWebEngineView object
-	def updateUrlBar(self, q, browser=None):
-		if browser != self.tabs.currentWidget():
-			return
-		self.urlbar.setText(q.toString())
-		self.urlbar.setCursorPosition(0)
