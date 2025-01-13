@@ -28,11 +28,11 @@ class MainWindow(QMainWindow):
 		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
 		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
-		# self.tabs.setStyleSheet("""
-		# 	QTabBar::tab {
-		# 		height: 20px;
-		# 	}
-		# """)
+		self.tabs.setStyleSheet("""
+			QTabBar::tab {
+				max-width: 200px;
+			}
+		""")
 
 		# creating a new tab
 		self.addNewTab(QUrl('http://google.com'), 'Homepage')
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
 		# setting status tip
 		backBtn.setStatusTip("Back to previous page")
 		# adding action to the back button
-		# making browser go back
+		# making currTab go back
 		backBtn.triggered.connect(lambda: self.tabs.currentWidget().back())
 		# adding this action to tool bar
 		navBar.addAction(backBtn)
@@ -88,10 +88,10 @@ class MainWindow(QMainWindow):
 		navBar.addSeparator()
 
 		# creating a line edit for the url
-		self.urlbar = QLineEdit(self)
+		self.urlBar = QLineEdit('',navBar)
 
 		#styling the URL bar
-		self.urlbar.setStyleSheet("""
+		self.urlBar.setStyleSheet("""
 			QLineEdit{
 				border-radius: 13px;
 				padding: 5px;
@@ -105,10 +105,10 @@ class MainWindow(QMainWindow):
 		""")
 
 		# adding action when return key is pressed
-		self.urlbar.returnPressed.connect(self.navigateToUrl)
+		self.urlBar.returnPressed.connect(self.navigateToUrl)
 
 		# adding this to the tool bar
-		navBar.addWidget(self.urlbar)
+		navBar.addWidget(self.urlBar)
 
 		# creating a action for new tab
 		# new_tab_btn = QAction(QIcon('icons/new_tab.png'), "New Tab", self)
@@ -164,14 +164,15 @@ class MainWindow(QMainWindow):
 		if qurl is None:
 			qurl = QUrl(NEW_TAB_DEFAULT_URL)
 
-		browser = QWebEngineView()
-		browser.setUrl(qurl)
-		i = self.tabs.addTab(browser, label)
+		newTab = QWebEngineView()
+		newTab.setUrl(qurl)
+		i = self.tabs.addTab(newTab, label)
 		self.tabs.setCurrentIndex(i)
 
-		browser.urlChanged.connect(lambda qurl, browser=browser: self.updateUrlBar(qurl, browser))
-		browser.loadStarted.connect(lambda i=i: self.updateTabLoadingIcon(i))
-		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.updateTabTitleAndIcon(i, browser))
+		#Event listener to update URL, title and favicon
+		newTab.urlChanged.connect(lambda qurl, newTab=newTab: self.updateUrlBar(qurl, newTab))
+		newTab.loadStarted.connect(lambda i=i: self.updateTabLoadingIcon(i))
+		newTab.loadFinished.connect(lambda _, i=i, newTab=newTab: self.updateTabTitleAndIcon(i, newTab))
 		self.updateTitle()
 
 	#Sets Loading icon when the page is loading
@@ -179,37 +180,34 @@ class MainWindow(QMainWindow):
 			self.loadingIcon = QIcon('icons/loading_black.gif')
 			self.tabs.setTabIcon(i, self.loadingIcon)
 
-	def updateTabTitleAndIcon(self, i, browser):
-		page = browser.page()
+	def updateTabTitleAndIcon(self, i, currTab):
+		page = currTab.page()
 		icon = page.icon()
 		title = page.title()
 		self.tabs.setTabText(i, title)
 		self.tabs.setTabIcon(i, icon)
 		self.updateTitle()
 
-	def currentTabChanged(self, i):
+	def currentTabChanged(self):
 		qurl = self.tabs.currentWidget().url()
-		print("new URL: %s" % qurl)
 		self.updateUrlBar(qurl, self.tabs.currentWidget())
 		self.updateTitle()
 
 	# method for updating the title of the window
 	def updateTitle(self):
-		# TODO - sometimes the page does not have a title when the app initialy started and when a new tab
-		# TODO - the title gets updated only after you gone to the next page
 		title = self.tabs.currentWidget().page().title()
-		print("Titile: %s\n" % title)
+		if len(title) > 25:
+			title = title[:25] + "..."
 		self.setWindowTitle("% s - Py Browser" % title)
 
 	# method for updating url
 	# this method is called by the QWebEngineView object
-	def updateUrlBar(self, q, browser=None):
-		if browser != self.tabs.currentWidget():
+	def updateUrlBar(self, qurl, currTab=None):
+		print(qurl.toString())
+		if currTab != self.tabs.currentWidget():
 			return
-		# TODO - The urlbar is not getting recognized as variable in the MainWindow
-		#self.urlbar.setText(q)
-		#self.urlbar.setText(str(q))
-		#self.urlbar.setCursorPosition(0)
+		#self.urlBar.setText(qurl.toString())
+		#self.urlBar.setCursorPosition(0)
 		
 	# method called by the home action
 	def navigateHome(self):
@@ -218,7 +216,7 @@ class MainWindow(QMainWindow):
 
 	# method called by the line edit when return key is pressed
 	def navigateToUrl(self):
-		q = QUrl(self.urlbar.text())
-		if q.scheme() == "":
-			q.setScheme("http")
-		self.tabs.currentWidget().setUrl(q)
+		qurl = QUrl(self.urlBar.text())
+		if qurl.scheme() == "":
+			qurl.setScheme("http")
+		self.tabs.currentWidget().setUrl(qurl)
