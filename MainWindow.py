@@ -1,5 +1,5 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt
 import os
@@ -29,13 +29,22 @@ class MainWindow(QMainWindow):
 				subcontrol-position: right;
 			}
 		""")
-		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
+
+		# Add a button to open a new tab
+		self.newTabButton = QToolButton()
+		self.newTabButton.setIcon(QIcon("icons/image.png"))
+		self.newTabButton.setToolTip("Open a new tab")
+		self.newTabButton.clicked.connect(lambda _: self.addNewTab())
+		self.tabs.setCornerWidget(self.newTabButton, Qt.TopRightCorner)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
 		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
 		self.tabs.setStyleSheet("""
 			# do not put the below style along with some other styles
 			QTabBar::tab {
 				max-width: 200px;
+			}
+			QToolButton{
+				background-color: 31302f;
 			}
 		""")
 
@@ -139,7 +148,7 @@ class MainWindow(QMainWindow):
 				padding: 3px;
 			}
 			QToolButton{
-				background-color: #white;
+				background-color: #31302f;
 				border-radius: 8px;
 				width: 25px;
 				height: 25px;
