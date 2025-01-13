@@ -18,17 +18,22 @@ class MainWindow(QMainWindow):
 		self.tabs = QTabWidget()
 		self.tabs.setDocumentMode(True)
 		self.tabs.setTabsClosable(True)
-		self.tabs.setTabPosition(QTabWidget.North)
-		self.tabs.setTabShape(QTabWidget.Rounded)
 		self.tabs.setMovable(True)
+		self.tabs.setTabPosition(QTabWidget.North)
+		#contols the size of tab bar to be dynamic when there is no enough space
 		self.tabs.setElideMode(Qt.ElideRight)
 		self.tabs.setUsesScrollButtons(True)
-		self.tabs.setTabBarAutoHide(False)
-		#self.tabs.setTabCloseButtonPosition(QTabWidget.RightSide)
+		tabBar = self.tabs.tabBar()
+		tabBar.setStyleSheet("""
+			QTabBar::close-button {
+				subcontrol-position: right;
+			}
+		""")
 		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
 		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
 		self.tabs.setStyleSheet("""
+			# do not put the below style along with some other styles
 			QTabBar::tab {
 				max-width: 200px;
 			}
