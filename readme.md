@@ -19,6 +19,8 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 ## Developer setup
 
 Install Python3 and pip3 to install PyQt5 and set their bin paths as the interpreter in your IDE.
+`pip3 install PyQt5`
+`pip3 install PyQtWebEngine`
 
 ## Login and Register
 

@@ -1,7 +1,7 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, Qt
 import os
 
 NEW_TAB_DEFAULT_URL = "http://www.google.com"
@@ -17,9 +17,16 @@ class MainWindow(QMainWindow):
 		# creating a QTabWidget
 		self.tabs = QTabWidget()
 		self.tabs.setDocumentMode(True)
+		self.tabs.setTabsClosable(True)
+		self.tabs.setTabPosition(QTabWidget.North)
+		self.tabs.setTabShape(QTabWidget.Rounded)
+		self.tabs.setMovable(True)
+		self.tabs.setElideMode(Qt.ElideRight)
+		self.tabs.setUsesScrollButtons(True)
+		self.tabs.setTabBarAutoHide(False)
+		#self.tabs.setTabCloseButtonPosition(QTabWidget.RightSide)
 		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
-		self.tabs.setTabsClosable(True)
 		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
 
 		# creating a new tab
@@ -158,7 +165,15 @@ class MainWindow(QMainWindow):
 		self.tabs.setCurrentIndex(i)
 
 		browser.urlChanged.connect(lambda qurl, browser=browser: self.updateUrlBar(qurl, browser))
-		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.tabs.setTabText(i, browser.page().title()))
+		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.updateTabTitleAndIcon(i, browser))
+		self.updateTitle()
+
+	def updateTabTitleAndIcon(self, i, browser):
+		page = browser.page()
+		icon = page.icon()
+		title = page.title()
+		self.tabs.setTabText(i, title)
+		self.tabs.setTabIcon(i, icon)
 		self.updateTitle()
 
 	def currentTabChanged(self, i):
