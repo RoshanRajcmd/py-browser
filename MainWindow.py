@@ -28,6 +28,11 @@ class MainWindow(QMainWindow):
 		self.tabs.tabBarDoubleClicked.connect(self.tabOpenDoubleClick)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
 		self.tabs.tabCloseRequested.connect(self.closeCurrentTab)
+		# self.tabs.setStyleSheet("""
+		# 	QTabBar::tab {
+		# 		height: 20px;
+		# 	}
+		# """)
 
 		# creating a new tab
 		self.addNewTab(QUrl('http://google.com'), 'Homepage')
@@ -165,8 +170,14 @@ class MainWindow(QMainWindow):
 		self.tabs.setCurrentIndex(i)
 
 		browser.urlChanged.connect(lambda qurl, browser=browser: self.updateUrlBar(qurl, browser))
+		browser.loadStarted.connect(lambda i=i: self.updateTabLoadingIcon(i))
 		browser.loadFinished.connect(lambda _, i=i, browser=browser: self.updateTabTitleAndIcon(i, browser))
 		self.updateTitle()
+
+	#Sets Loading icon when the page is loading
+	def updateTabLoadingIcon(self, i):
+			self.loadingIcon = QIcon('icons/loading_black.gif')
+			self.tabs.setTabIcon(i, self.loadingIcon)
 
 	def updateTabTitleAndIcon(self, i, browser):
 		page = browser.page()
