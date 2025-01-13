@@ -16,7 +16,7 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 1. Basic navigations functionality and widgets.
 2. Tabs functionality with reloading icon and famicons
 3. The tab tile and window title will get changed to the current page its in.
-4. Repositioning Tabs
+4. Repositioning Tabs and Navigation tool bar
 
 ## Developer setup
 

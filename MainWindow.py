@@ -1,7 +1,7 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtCore import QUrl, Qt, QSize
 import os
 
 NEW_TAB_DEFAULT_URL = "http://www.google.com"
@@ -32,8 +32,9 @@ class MainWindow(QMainWindow):
 
 		# Add a button to open a new tab
 		self.newTabButton = QToolButton()
-		self.newTabButton.setIcon(QIcon("icons/image.png"))
+		self.newTabButton.setIcon(QIcon("icons/add_black.png"))
 		self.newTabButton.setToolTip("Open a new tab")
+		self.newTabButton.setIconSize(QSize(30, 30)) 
 		self.newTabButton.clicked.connect(lambda _: self.addNewTab())
 		self.tabs.setCornerWidget(self.newTabButton, Qt.TopRightCorner)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
@@ -44,12 +45,12 @@ class MainWindow(QMainWindow):
 				max-width: 200px;
 			}
 			QToolButton{
-				background-color: 31302f;
+				height: 40px;
 			}
 		""")
 
 		# creating a new tab
-		self.addNewTab(QUrl('http://google.com'), 'Homepage')
+		self.addNewTab(QUrl(HOME_URL), 'Homepage')
 
 		# set this tabs as central widget or main window
 		self.setCentralWidget(self.tabs)
@@ -81,7 +82,7 @@ class MainWindow(QMainWindow):
 		navBar.addAction(nextBtn)
 
 		# similarly for reload action
-		reloadBtn = QAction(QIcon('icons/reload_black.png'),"Reload", self)
+		reloadBtn = QAction(QIcon('icons/refresh_black.png'),"Reload", self)
 		reloadBtn.setStatusTip("Reload page")
 		reloadBtn.triggered.connect(lambda: self.tabs.currentWidget().reload())
 		navBar.addAction(reloadBtn)
@@ -93,7 +94,7 @@ class MainWindow(QMainWindow):
 		navBar.addAction(homeBtn)
 
 		# adding stop action to the tool bar
-		stopBtn = QAction("X", self)
+		stopBtn = QAction(QIcon('icons/close_black.png'), "Stop", self)
 		stopBtn.setStatusTip("Stop loading current page")
 		stopBtn.triggered.connect(lambda: self.tabs.currentWidget().stop())
 		navBar.addAction(stopBtn)
@@ -124,12 +125,12 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		navBar.addWidget(self.urlBar)
 
-		bookmarkBtn = QAction(QIcon('icons/bookmark_black'),"Bookmark Page", self)
+		bookmarkBtn = QAction(QIcon('icons/star_black'),"Bookmark Page", self)
 		bookmarkBtn.setStatusTip("Bookmark Page")
 		#bookmarkBtn.triggered.connect(self.bookmarkPage)
 		navBar.addAction(bookmarkBtn)
 
-		actionBtn = QAction(QIcon('icons/bookmark_black'),"More Actions", self)
+		actionBtn = QAction(QIcon('icons/menu_black'),"More Actions", self)
 		actionBtn.setStatusTip("More Action")
 		#actionBtn.triggered.connect(self.openActions)
 		navBar.addAction(actionBtn)
@@ -139,7 +140,7 @@ class MainWindow(QMainWindow):
 			QToolBar{
 				background-color: #31302f;
 				font-size: 14px;
-				padding: 3px;
+				padding: 5px;
 			}
 			QToolButton{
 				background-color: #31302f;
@@ -147,9 +148,10 @@ class MainWindow(QMainWindow):
 				width: 25px;
 				height: 25px;
 				margin: 0 5px;
+				opacity: 1.0;
 			}
 			QToolButton:hover{
-				background-color: #ECEFF1;
+				opacity: 0.5;
 			}
 		""")
 
