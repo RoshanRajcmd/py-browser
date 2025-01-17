@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "title": "home_tab_title",
+        "url": "http://www.google.com"
+    },
+    {
+        "title": "new_tab_title",
+        "url": "http://www.google.com"
+    }
+]

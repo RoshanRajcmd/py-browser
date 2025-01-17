@@ -6,9 +6,27 @@ from ActionsDialog import ActionsDialog
 import os
 import json
 
-NEW_TAB_DEFAULT_URL = "http://www.google.com"
-HOME_URL = "http://www.google.com"
 BOOKMARK_FILE = "/Users/roshanraj-mac/Documents/VSCodeWS/py-browser/bookmarks.json"
+HOME_TAB = "home_tab_title"
+NEW_TAB = "new_tab_title"
+GOOGLE = "http://www.google.com"
+
+#Search and Loads up the Home url and new tab url from bookmarks.json
+def load_urls_from_bookmarks():
+	if not os.path.exists(BOOKMARK_FILE):
+		with open(BOOKMARK_FILE, 'w') as file:
+			json.dump([], file)
+		return GOOGLE, GOOGLE
+	try:
+		with open(BOOKMARK_FILE, 'r') as file:
+			bookmarks = json.load(file)
+			home_url = next((bookmark['url'] for bookmark in bookmarks if bookmark['title'] == HOME_TAB), GOOGLE)
+			new_tab_url = next((bookmark['url'] for bookmark in bookmarks if bookmark['title'] == NEW_TAB), GOOGLE)
+			return home_url, new_tab_url
+	except json.JSONDecodeError:
+		return GOOGLE, GOOGLE
+
+HOME_URL, NEW_TAB_DEFAULT_URL = load_urls_from_bookmarks()
 
 # creating main window class
 class MainWindow(QMainWindow):
@@ -224,7 +242,7 @@ class MainWindow(QMainWindow):
 	# method for updating url
 	# this method is called by the QWebEngineView object
 	def updateUrlBar(self, qurl, currTab=None):
-		print(qurl.toString())
+		# print(qurl.toString())  # Debugging statement removed
 		if currTab != self.tabs.currentWidget():
 			return
 		#self.urlBar.setText(qurl.toString())
@@ -269,9 +287,8 @@ class MainWindow(QMainWindow):
 		if webView and webView.url().toString():
 			title = webView.page().title()
 			bookmark = {'title': title, 'url': webView.url().toString()}
-		
-		self.bookmarks.append(bookmark)
-		self.saveBookmark
+			self.bookmarks.append(bookmark)
+			self.saveBookmark()
 	
 	def saveBookmark(self):
 		# Save the bookmarks to the file
