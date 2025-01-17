@@ -1,5 +1,5 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton, QPushButton, QHBoxLayout
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize, QRect
@@ -74,38 +74,48 @@ class MainWindow(QMainWindow):
 
 		# adding actions to the tool bar
 		# creating a action for back
-		backBtn = QAction(QIcon('icons/backward_black.png'),"Back", self)
+		backBtn = QPushButton(QIcon('icons/backward_black.png'), None, self)
 		# setting status tip
 		backBtn.setStatusTip("Back to previous page")
 		# adding action to the back button
 		# making currTab go back
-		backBtn.triggered.connect(lambda: self.tabs.currentWidget().back())
+		backBtn.clicked.connect(lambda: self.tabs.currentWidget().back())
 		# adding this action to tool bar
-		navBar.addAction(backBtn)
+		backBtn.setIconSize(QSize(30, 30))
+		backBtn.setFixedSize(backBtn.iconSize())
+		navBar.addWidget(backBtn)
 
 		# similarly for forward action
-		nextBtn = QAction(QIcon('icons/forward_black.png'),"Forward", self)
+		nextBtn = QPushButton(QIcon('icons/forward_black.png'), None, self)
 		nextBtn.setStatusTip("Forward to next page")
-		nextBtn.triggered.connect(lambda: self.tabs.currentWidget().forward())
-		navBar.addAction(nextBtn)
+		nextBtn.clicked.connect(lambda: self.tabs.currentWidget().forward())
+		nextBtn.setIconSize(QSize(30, 30))
+		nextBtn.setFixedSize(nextBtn.iconSize())
+		navBar.addWidget(nextBtn)
 
 		# similarly for reload action
-		reloadBtn = QAction(QIcon('icons/refresh_black.png'),"Reload", self)
+		reloadBtn = QPushButton(QIcon('icons/refresh_black.png'), None, self)
 		reloadBtn.setStatusTip("Reload page")
-		reloadBtn.triggered.connect(lambda: self.tabs.currentWidget().reload())
-		navBar.addAction(reloadBtn)
+		reloadBtn.clicked.connect(lambda: self.tabs.currentWidget().reload())
+		reloadBtn.setIconSize(QSize(30, 30))
+		reloadBtn.setFixedSize(reloadBtn.iconSize())
+		navBar.addWidget(reloadBtn)
 
 		# similarly for home action
-		homeBtn = QAction(QIcon('icons/home_black.png'),"Home", self)
+		homeBtn = QPushButton(QIcon('icons/home_black.png'), None, self)
 		homeBtn.setStatusTip("Go home")
-		homeBtn.triggered.connect(self.navigateHome)
-		navBar.addAction(homeBtn)
+		homeBtn.clicked.connect(self.navigateHome)
+		homeBtn.setIconSize(QSize(30, 30))
+		homeBtn.setFixedSize(homeBtn.iconSize())
+		navBar.addWidget(homeBtn)
 
 		# adding stop action to the tool bar
-		stopBtn = QAction(QIcon('icons/close_black.png'), "Stop", self)
+		stopBtn = QPushButton(QIcon('icons/close_black.png'), None, self)
 		stopBtn.setStatusTip("Stop loading current page")
-		stopBtn.triggered.connect(lambda: self.tabs.currentWidget().stop())
-		navBar.addAction(stopBtn)
+		stopBtn.clicked.connect(lambda: self.tabs.currentWidget().stop())
+		stopBtn.setIconSize(QSize(30, 30))
+		stopBtn.setFixedSize(stopBtn.iconSize())
+		navBar.addWidget(stopBtn)
 
 		# adding a separator in the tool bar
 		navBar.addSeparator()
@@ -133,33 +143,26 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		navBar.addWidget(self.urlBar)
 
-		bookmarkBtn = QAction(QIcon('icons/star_black'),"Bookmark Page", self)
+		bookmarkBtn = QPushButton(QIcon('icons/star_black'), None, self)
 		bookmarkBtn.setStatusTip("Bookmark Page")
-		#bookmarkBtn.triggered.connect(self.bookmarkPage)
-		navBar.addAction(bookmarkBtn)
+		#bookmarkBtn.clicked.connect(self.bookmarkPage)
+		bookmarkBtn.setIconSize(QSize(30, 30))
+		bookmarkBtn.setFixedSize(bookmarkBtn.iconSize())
+		navBar.addWidget(bookmarkBtn)
 
-		actionBtn = QAction(QIcon('icons/menu_black'),"More Actions", self)
+		actionBtn = QPushButton(QIcon('icons/menu_black'), None, self)
 		actionBtn.setStatusTip("More Action")
-		#actionBtn.triggered.connect(self.openActions)
-		navBar.addAction(actionBtn)
+		#actionBtn.clicked.connect(self.openActions)
+		actionBtn.setIconSize(QSize(30, 30))
+		actionBtn.setFixedSize(actionBtn.iconSize())
+		navBar.addWidget(actionBtn)
 		
-        #customizing  the toolbare with rounded style
+         #customizing  the toolbare with rounded style
 		navBar.setStyleSheet("""
 			QToolBar{
 				background-color: #31302f;
 				font-size: 14px;
 				padding: 5px;
-			}
-			QToolButton{
-				background-color: #31302f;
-				border-radius: 8px;
-				width: 25px;
-				height: 25px;
-				margin: 0 5px;
-				opacity: 1.0;
-			}
-			QToolButton:hover{
-				opacity: 0.5;
 			}
 		""")
 
