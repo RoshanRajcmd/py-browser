@@ -1,14 +1,14 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton, QPushButton, QHBoxLayout
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QLineEdit, QTabWidget, QToolButton, QPushButton
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QUrl, Qt, QSize, QRect
+from PyQt5.QtCore import QUrl, Qt, QSize
 from ActionsDialog import ActionsDialog
 import os
+import json
 
 NEW_TAB_DEFAULT_URL = "http://www.google.com"
 HOME_URL = "http://www.google.com"
-BOOKMARKE_FILE = "bookmarks.json"
+BOOKMARK_FILE = "/Users/roshanraj-mac/Documents/VSCodeWS/py-browser/bookmarks.json"
 
 # creating main window class
 class MainWindow(QMainWindow):
@@ -145,14 +145,14 @@ class MainWindow(QMainWindow):
 
 		bookmarkBtn = QPushButton(QIcon('icons/star_black'), None, self)
 		bookmarkBtn.setStatusTip("Bookmark Page")
-		#bookmarkBtn.clicked.connect(self.bookmarkPage)
+		bookmarkBtn.clicked.connect(self.addBookmark)
 		bookmarkBtn.setIconSize(QSize(30, 30))
 		bookmarkBtn.setFixedSize(bookmarkBtn.iconSize())
 		navBar.addWidget(bookmarkBtn)
 
 		actionBtn = QPushButton(QIcon('icons/menu_black'), None, self)
 		actionBtn.setStatusTip("More Action")
-		#actionBtn.clicked.connect(self.openActions)
+		actionBtn.clicked.connect(self.showMoreActions)
 		actionBtn.setIconSize(QSize(30, 30))
 		actionBtn.setFixedSize(actionBtn.iconSize())
 		navBar.addWidget(actionBtn)
@@ -168,6 +168,9 @@ class MainWindow(QMainWindow):
 
 		# adding this tool bar tot he main window
 		self.addToolBar(navBar)
+
+		#Load in all the bookmarks
+		self.bookmarks = self.loadBookmarks()
 
 		# showing all the components
 		self.show()
@@ -238,3 +241,39 @@ class MainWindow(QMainWindow):
 		if qurl.scheme() == "":
 			qurl.setScheme("http")
 		self.tabs.currentWidget().setUrl(qurl)
+
+	def showMoreActions(self):
+		dialog = ActionsDialog(self, self)
+
+		#Position the dialog near the button
+		#buttonPos = self.actionBtn.parentWidget().mapToGlobal(self.actionBtn.rect().bottomLeft())
+		#dialog.move(buttonPos)
+
+		#Show the dialog
+		dialog.exec_()
+	
+	def loadBookmarks(self):
+		if not os.path.exists(BOOKMARK_FILE):
+			with open(BOOKMARK_FILE, 'w') as file:
+				json.dump([], file)
+			return []
+		try:
+			with open(BOOKMARK_FILE, 'r') as file:
+				return json.load(file)
+		except json.JSONDecodeError:
+			# if file is empty or contains invalid JSON, return an empty list
+			return []
+
+	def addBookmark(self):
+		webView = self.tabs.currentWidget()
+		if webView and webView.url().toString():
+			title = webView.page().title()
+			bookmark = {'title': title, 'url': webView.url().toString()}
+		
+		self.bookmarks.append(bookmark)
+		self.saveBookmark
+	
+	def saveBookmark(self):
+		# Save the bookmarks to the file
+		with open(BOOKMARK_FILE, 'w') as file:
+			json.dump(self.bookmarks, file, indent=4)
