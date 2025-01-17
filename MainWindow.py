@@ -13,9 +13,10 @@ GOOGLE = "http://www.google.com"
 
 #Search and Loads up the Home url and new tab url from bookmarks.json
 def load_urls_from_bookmarks():
+	#If there is no bookmark.json create one with default tab urls in it
 	if not os.path.exists(BOOKMARK_FILE):
 		with open(BOOKMARK_FILE, 'w') as file:
-			json.dump([], file)
+			json.dump([{'tile': HOME_TAB, 'url': GOOGLE}, {'tile': NEW_TAB, 'url': GOOGLE}], file, indent=4)
 		return GOOGLE, GOOGLE
 	try:
 		with open(BOOKMARK_FILE, 'r') as file:
@@ -273,7 +274,7 @@ class MainWindow(QMainWindow):
 	def loadBookmarks(self):
 		if not os.path.exists(BOOKMARK_FILE):
 			with open(BOOKMARK_FILE, 'w') as file:
-				json.dump([], file)
+				json.dump([{'tile': HOME_TAB, 'url': GOOGLE}, {'tile': NEW_TAB, 'url': GOOGLE}], file, indent=4)
 			return []
 		try:
 			with open(BOOKMARK_FILE, 'r') as file:
