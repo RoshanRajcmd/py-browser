@@ -1,11 +1,14 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QAction, QLineEdit, QTabWidget, QToolButton, QPushButton
+from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QUrl, Qt, QSize
+from PyQt5.QtCore import QUrl, Qt, QSize, QRect
+from ActionsDialog import ActionsDialog
 import os
 
 NEW_TAB_DEFAULT_URL = "http://www.google.com"
 HOME_URL = "http://www.google.com"
+BOOKMARKE_FILE = "bookmarks.json"
 
 # creating main window class
 class MainWindow(QMainWindow):
@@ -20,7 +23,7 @@ class MainWindow(QMainWindow):
 		self.tabs.setTabsClosable(True)
 		self.tabs.setMovable(True)
 		self.tabs.setTabPosition(QTabWidget.North)
-		#contols the size of tab bar to be dynamic when there is no enough space
+		# controls the size of tab bar to be dynamic when there is no enough space
 		self.tabs.setElideMode(Qt.ElideRight)
 		self.tabs.setUsesScrollButtons(True)
 		tabBar = self.tabs.tabBar()
@@ -28,13 +31,20 @@ class MainWindow(QMainWindow):
 			QTabBar::close-button {
 				subcontrol-position: right;
 			}
+			QTabBar::tab {
+				height: 30px;
+			}
 		""")
 
 		# Add a button to open a new tab
 		self.newTabButton = QToolButton()
-		self.newTabButton.setIcon(QIcon("icons/add_black.png"))
 		self.newTabButton.setToolTip("Open a new tab")
-		self.newTabButton.setIconSize(QSize(30, 30)) 
+		self.newTabButton.setIcon(QIcon("icons/add_black.png"))
+		self.newTabButton.setIconSize(QSize(30, 30))
+		#the size the icon should be same as the tabbar height else it will clip throught
+		self.newTabButton.setFixedSize(self.newTabButton.iconSize())
+
+	
 		self.newTabButton.clicked.connect(lambda _: self.addNewTab())
 		self.tabs.setCornerWidget(self.newTabButton, Qt.TopRightCorner)
 		self.tabs.currentChanged.connect(self.currentTabChanged)
@@ -43,9 +53,6 @@ class MainWindow(QMainWindow):
 			# do not put the below style along with some other styles
 			QTabBar::tab {
 				max-width: 200px;
-			}
-			QToolButton{
-				height: 40px;
 			}
 		""")
 
