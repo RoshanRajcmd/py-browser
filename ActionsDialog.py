@@ -13,22 +13,22 @@ class ActionsDialog(QDialog):
 
       self.layout = QVBoxLayout()
 
-      self.viewBookMarksBtn = QPushButton("Show All BookMarks", self)
-      self.viewBookMarksBtn.clicked.connect(self.viewBookMarksInTab)
-      self.layout.addWidget(self.viewBookMarksBtn)
+      self.view_bookmark_btn = QPushButton("Show All BookMarks", self)
+      self.view_bookmark_btn.clicked.connect(self.view_bookmarks_in_tab)
+      self.layout.addWidget(self.view_bookmark_btn)
    
-   def viewBookMarksInTab(self):
+   def view_bookmarks_in_tab(self):
       dialog = QDialog(self)
       dialog.setWindowTitle("Bookmarks")
       layout = QVBoxLayout()
 
       for bookmark in self.bookmarks:
          button = QPushButton(bookmark['title'])
-         button.clicked.connect(lambda checked, url=bookmark['url']: self.openBookMark(url))
+         button.clicked.connect(lambda checked, url=bookmark['url']: self.open_bookmark(url))
          layout.addWidget(button)
 
       dialog.setLayout(layout)
       dialog.exec_()
    
-   def openBookMark(self, url):
-      self.mainWindow.addNewTab(QUrl(url))
+   def open_bookmark(self, url):
+      self.mainWindow.add_new_tab(QUrl(url))
