@@ -1,6 +1,7 @@
 # importing required libraries
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import *
+from PyQt5 import QtGui
+from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import *
 from MainWindow import MainWindow
 import sys
@@ -10,6 +11,9 @@ app = QApplication(sys.argv)
 
 # setting name to the application
 app.setApplicationName("Py Browser")
+
+#app.setStyle("Fusion")
+app.setWindowIcon(QtGui.QIcon('icons/add_black.png'))
 
 #styling tthe app
 app.setStyleSheet("""
@@ -24,7 +28,7 @@ app.setStyleSheet("""
 		color: white;
 	}
 	QMainWindow{
-		background-color: #ECEFF1;
+		background-color: #31302f;
 		border-radius: 10px;
 	}
 """)

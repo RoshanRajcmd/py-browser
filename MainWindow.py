@@ -63,6 +63,7 @@ class MainWindow(QMainWindow):
 
 		# creating QToolBar for navigation
 		navBar = QToolBar("Navigation")
+		navBar.setMovable(False)
 
 		# adding actions to the tool bar
 		# creating a action for back
