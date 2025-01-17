@@ -29,6 +29,11 @@ def load_urls_from_bookmarks():
 
 HOME_URL, NEW_TAB_DEFAULT_URL = load_urls_from_bookmarks()
 
+class SelectableLineEdit(QLineEdit):
+    def focusInEvent(self, event):
+        super().focusInEvent(event)
+        self.selectAll()
+
 # creating main window class
 class MainWindow(QMainWindow):
 
@@ -139,7 +144,7 @@ class MainWindow(QMainWindow):
 		nav_bar.addSeparator()
 
 		# creating a line edit for the url
-		self.url_bar = QLineEdit('', nav_bar)
+		self.url_bar = SelectableLineEdit('', nav_bar)
 
 		#styling the URL bar
 		self.url_bar.setStyleSheet("""
@@ -208,10 +213,11 @@ class MainWindow(QMainWindow):
 		i = self.tabs.addTab(new_tab, label)
 		self.tabs.setCurrentIndex(i)
 
-		#Event listener to update URL, title and favicon
+		# Event listener to update URL, title and favicon
 		new_tab.urlChanged.connect(lambda qurl, new_tab=new_tab: self.update_url_bar(qurl, new_tab))
 		new_tab.loadStarted.connect(lambda i=i: self.update_tab_loading_icon(i))
 		new_tab.loadFinished.connect(lambda _, i=i, new_tab=new_tab: self.update_tab_title_and_icon(i, new_tab))
+		new_tab.iconChanged.connect(lambda icon, i=i: self.tabs.setTabIcon(i, icon))
 		self.update_title()
 
 	#Sets Loading icon when the page is loading
