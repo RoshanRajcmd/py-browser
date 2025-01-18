@@ -1,4 +1,4 @@
-# PyBrowser
+# ![pybrowser_icon](https://github.com/user-attachments/assets/15fa2d4a-b4e2-4616-9347-350f9c39ec04) PyBrowser
 
 A Web Browser written in Python using the GUI framework PyQt5.
 
