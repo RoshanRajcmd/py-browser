@@ -2,26 +2,26 @@
 
 A Web Browser written in Python using the GUI framework PyQt5.
 
-## Source Code
+## ⚙️ Source Code
 
 Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 
-## Tech Stack and Packages
+## 📚 Tech Stack and Packages
 
 * Python3
   * PyQt5
 
-## Features
+## 🎛️ Features
 
-1. Basic navigation functionality and widgets.
+1. Basic navigation functionality and widgets
 2. Tabs functionality with reloading icon and favicons
-3. The tab tile and window title will be changed to the current page it is on.
-4. Repositioning Tabs.
+3. The tab tile and window title will be changed to the current page it is on
+4. Repositioning Tabs
 5. Can access and render applications running in localhost ports
 6. Bookmark functionality with customizability in Home page and New tab URL
-7. Json serialization and desrialization of bookmarks.
+7. Json serialization and desrialization of bookmarks
 
-## Developer setup
+## 🧑‍💻 Developer setup
 
 Install Python3 and pip3 to install PyQt5 and set their bin paths as the interpreter in your IDE.
 `pip3 install PyQt5`
@@ -34,12 +34,11 @@ The Use of frameworks comes with disadvantages that is there in this project, li
 * The Maps will not load
 * Downloading is not an option
 * Web pages with advanced layouts will overlap
-* Font import of web pages will fail
-
+* Some font import of web pages will fail
 
 These issues will be fixed in the future
 
-## Screenshots
+## 📸 Screenshots
 
 <img width="1469" alt="Screenshot 2025-01-13 at 6 52 32 PM" src="https://github.com/user-attachments/assets/d4bd659a-a186-4dc9-8ce9-a468bfba6d33" />
 <img width="1469" alt="Screenshot 2025-01-13 at 6 54 06 PM" src="https://github.com/user-attachments/assets/325525b2-6d31-48ab-845f-bbf85038dc61" />
