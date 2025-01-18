@@ -2,6 +2,8 @@
 
 A Web Browser written in Python using the GUI framework PyQt5.
 
+<img src="https://github.com/user-attachments/assets/15fa2d4a-b4e2-4616-9347-350f9c39ec04" alt="pybrowser_icon" style="width:70px; height:70px;">
+
 ## ⚙️ Source Code
 
 Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
@@ -19,7 +21,7 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 4. Repositioning Tabs
 5. Can access and render applications running in localhost ports
 6. Bookmark functionality with customizability in Home page and New tab URL
-7. Json serialization and desrialization of bookmarks
+7. Json serialization and deserialization of bookmarks
 
 ## 🧑‍💻 Developer setup
 
@@ -40,8 +42,9 @@ These issues will be fixed in the future
 
 ## 📸 Screenshots
 
-<img width="1469" alt="Screenshot 2025-01-13 at 6 52 32 PM" src="https://github.com/user-attachments/assets/d4bd659a-a186-4dc9-8ce9-a468bfba6d33" />
-<img width="1469" alt="Screenshot 2025-01-13 at 6 54 06 PM" src="https://github.com/user-attachments/assets/325525b2-6d31-48ab-845f-bbf85038dc61" />
-<img width="1469" alt="Screenshot 2025-01-13 at 6 55 58 PM" src="https://github.com/user-attachments/assets/34826e02-4d8e-4f9c-94b3-c3e6dad7de97" />
+
+<img width="1469" alt="Screenshot 2025-01-18 at 5 23 39 PM" src="https://github.com/user-attachments/assets/c7cf1717-3d4e-4889-80a4-f44ea6e23d5f" />
+<img width="1469" alt="Screenshot 2025-01-18 at 5 24 14 PM" src="https://github.com/user-attachments/assets/bf559886-4768-471d-b64a-1a4f5bd73ac3" />
+<img width="1469" alt="Screenshot 2025-01-18 at 5 24 32 PM" src="https://github.com/user-attachments/assets/5d25207b-eac5-4938-81ec-28b325529e89" />
 
 
