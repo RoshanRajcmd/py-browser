@@ -16,6 +16,30 @@ class BookmarkDialog(QDialog):
         self.url_input = QLineEdit(self)
         self.title_input.setText(title)
         self.url_input.setText(url)
+        self.title_input.setStyleSheet("""
+            QLineEdit{
+            border-radius: 5px;
+            padding: 3px;
+            background-color: black;
+            font-size: 14px;
+            color: white;
+            }
+            QLineEdit:focus{
+            border: 2px solid #1E88E5;
+            }
+        """)
+        self.url_input.setStyleSheet("""
+            QLineEdit{
+            border-radius: 5px;
+            padding: 3px;
+            background-color: black;
+            font-size: 14px;
+            color: white;
+            }
+            QLineEdit:focus{
+            border: 2px solid #1E88E5;
+            }
+        """)
         self.layout.addRow("Title:", self.title_input)
         self.layout.addRow("URL:", self.url_input)
 

@@ -13,7 +13,23 @@ class ActionsDialog(QDialog):
 
       self.layout = QVBoxLayout()
 
+      # Set the layout to the dialog
+      self.setLayout(self.layout)
+
+      # Adjust the size of the dialog to fit its contents
+      self.adjustSize()
+
       self.view_bookmark_btn = QPushButton("Show All BookMarks", self)
+      self.view_bookmark_btn.setStyleSheet("""
+        QPushButton {
+            border-radius: 5px;
+            background-color: #6E6E6D;
+            padding: 3px;
+         }
+         QPushButton:hover{
+            background-color: #1E88E5;
+         }
+      """)
       self.view_bookmark_btn.clicked.connect(self.view_bookmarks_in_tab)
       self.layout.addWidget(self.view_bookmark_btn)
    
@@ -24,6 +40,16 @@ class ActionsDialog(QDialog):
 
       for bookmark in self.bookmarks:
          button = QPushButton(bookmark['title'])
+         button.setStyleSheet("""
+            QPushButton {
+               border-radius: 5px;
+               background-color: #6E6E6D;
+               padding: 3px;
+            }
+            QPushButton:hover{
+               background-color: #1E88E5;
+            }
+         """)
          button.clicked.connect(lambda checked, url=bookmark['url']: self.open_bookmark(url))
          layout.addWidget(button)
 

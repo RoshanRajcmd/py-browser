@@ -250,7 +250,7 @@ class MainWindow(QMainWindow):
 	def show_more_actions(self):
 		dialog = ActionsDialog(self, self)
 		#Position the dialog near the button
-		buttonPos = self.action_btn.parentWidget().mapToGlobal(self.action_btn.rect().bottomLeft())
+		buttonPos = self.action_btn.mapToGlobal(self.action_btn.rect().bottomLeft())
 		dialog.move(buttonPos)
 		#Show the dialog
 		dialog.exec_()
