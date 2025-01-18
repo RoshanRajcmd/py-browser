@@ -268,19 +268,26 @@ class MainWindow(QMainWindow):
 			return []
 
 	def add_bookmark(self):
-		dialog = BookmarkDialog(self)
+		#Get the current tab Title and URL 
+		web_view = self.tabs.currentWidget()
+		if web_view and web_view.url().toString() and web_view.page().title():
+			dialog = BookmarkDialog(web_view.page().title(), web_view.url().toString(), self)
+
+		#postion the dialog near its parent button
 		buttons_pos = self.bookmark_btn.mapToGlobal(self.bookmark_btn.rect().bottomLeft())
 		dialog.move(buttons_pos)
+
+		#if the dialog executed 
 		if dialog.exec_() == QDialog.Accepted:
 			title, url = dialog.get_input()
 			print("Bookmark added: Title = {title}, URL = {url}")
-
-		web_view = self.tabs.currentWidget()
-		if web_view and web_view.url().toString():
-			title = web_view.page().title()
-			bookmark = {'title': title, 'url': web_view.url().toString()}
+		
+			#add them to the bookmarks.json
+			bookmark = {'title': title, 'url': url}
 			self.bookmarks.append(bookmark)
 			self.save_bookmark()
+		elif dialog.exec_() == QDialog.Rejected:
+			return
 
 	def save_bookmark(self):
 		# Save the bookmarks to the file
