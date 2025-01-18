@@ -1,8 +1,9 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize
 from ActionsDialog import ActionsDialog
+from BookmarkDialog import BookmarkDialog
 from SelectableLineEdit import SelectableLineEdit
 from utils import load_urls_from_bookmarks, BOOKMARK_FILE, HOME_TAB, NEW_TAB, GOOGLE
 import os
@@ -145,19 +146,19 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		nav_bar.addWidget(self.url_bar)
 
-		bookmark_btn = QPushButton(QIcon('icons/star_black'), None, self)
-		bookmark_btn.setStatusTip("Bookmark Page")
-		bookmark_btn.clicked.connect(self.add_bookmark)
-		bookmark_btn.setIconSize(QSize(30, 30))
-		bookmark_btn.setFixedSize(bookmark_btn.iconSize())
-		nav_bar.addWidget(bookmark_btn)
+		self.bookmark_btn = QPushButton(QIcon('icons/star_black'), None, self)
+		self.bookmark_btn.setStatusTip("Bookmark Page")
+		self.bookmark_btn.clicked.connect(self.add_bookmark)
+		self.bookmark_btn.setIconSize(QSize(30, 30))
+		self.bookmark_btn.setFixedSize(self.bookmark_btn.iconSize())
+		nav_bar.addWidget(self.bookmark_btn)
 
-		action_btn = QPushButton(QIcon('icons/menu_black'), None, self)
-		action_btn.setStatusTip("More Action")
-		action_btn.clicked.connect(self.show_more_actions)
-		action_btn.setIconSize(QSize(30, 30))
-		action_btn.setFixedSize(action_btn.iconSize())
-		nav_bar.addWidget(action_btn)
+		self.action_btn = QPushButton(QIcon('icons/menu_black'), None, self)
+		self.action_btn.setStatusTip("More Action")
+		self.action_btn.clicked.connect(self.show_more_actions)
+		self.action_btn.setIconSize(QSize(30, 30))
+		self.action_btn.setFixedSize(self.action_btn.iconSize())
+		nav_bar.addWidget(self.action_btn)
 
 		#customizing  the toolbare with rounded style
 		nav_bar.setStyleSheet("""
@@ -246,8 +247,8 @@ class MainWindow(QMainWindow):
 	def show_more_actions(self):
 		dialog = ActionsDialog(self, self)
 		#Position the dialog near the button
-		#buttonPos = self.actionBtn.parentWidget().mapToGlobal(self.actionBtn.rect().bottomLeft())
-		#dialog.move(buttonPos)
+		buttonPos = self.action_btn.parentWidget().mapToGlobal(self.action_btn.rect().bottomLeft())
+		dialog.move(buttonPos)
 		#Show the dialog
 		dialog.exec_()
 
@@ -264,6 +265,13 @@ class MainWindow(QMainWindow):
 			return []
 
 	def add_bookmark(self):
+		dialog = BookmarkDialog(self)
+		buttons_pos = self.bookmark_btn.mapToGlobal(self.bookmark_btn.rect().bottomLeft())
+		dialog.move(buttons_pos)
+		if dialog.exec_() == QDialog.Accepted:
+			title, url = dialog.get_input()
+			print("Bookmark added: Title = {title}, URL = {url}")
+
 		web_view = self.tabs.currentWidget()
 		if web_view and web_view.url().toString():
 			title = web_view.page().title()
