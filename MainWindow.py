@@ -1,38 +1,14 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QLineEdit, QTabWidget, QToolButton, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize
 from ActionsDialog import ActionsDialog
+from SelectableLineEdit import SelectableLineEdit
+from utils import load_urls_from_bookmarks, BOOKMARK_FILE, HOME_TAB, NEW_TAB, GOOGLE
 import os
 import json
 
-BOOKMARK_FILE = "/Users/roshanraj-mac/Documents/VSCodeWS/py-browser/bookmarks.json"
-HOME_TAB = "home_tab_title"
-NEW_TAB = "new_tab_title"
-GOOGLE = "http://www.google.com"
-
-#Search and Loads up the Home url and new tab url from bookmarks.json
-def load_urls_from_bookmarks():
-	#If there is no bookmark.json create one with default tab urls in it
-	if not os.path.exists(BOOKMARK_FILE):
-		with open(BOOKMARK_FILE, 'w') as file:
-			json.dump([{'title': HOME_TAB, 'url': GOOGLE}, {'title': NEW_TAB, 'url': GOOGLE}], file, indent=4)
-		return GOOGLE, GOOGLE
-	try:
-		with open(BOOKMARK_FILE, 'r') as file:
-			bookmarks = json.load(file)
-			home_url = next((bookmark['url'] for bookmark in bookmarks if bookmark['title'] == HOME_TAB), GOOGLE)
-			new_tab_url = next((bookmark['url'] for bookmark in bookmarks if bookmark['title'] == NEW_TAB), GOOGLE)
-			return home_url, new_tab_url
-	except json.JSONDecodeError:
-		return GOOGLE, GOOGLE
-
 HOME_URL, NEW_TAB_DEFAULT_URL = load_urls_from_bookmarks()
-
-class SelectableLineEdit(QLineEdit):
-    def focusInEvent(self, event):
-        super().focusInEvent(event)
-        self.selectAll()
 
 # creating main window class
 class MainWindow(QMainWindow):
@@ -271,7 +247,6 @@ class MainWindow(QMainWindow):
 		#Position the dialog near the button
 		#buttonPos = self.actionBtn.parentWidget().mapToGlobal(self.actionBtn.rect().bottomLeft())
 		#dialog.move(buttonPos)
-
 		#Show the dialog
 		dialog.exec_()
 
