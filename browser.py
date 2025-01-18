@@ -13,7 +13,7 @@ app = QApplication(sys.argv)
 app.setApplicationName("Py Browser")
 
 #app.setStyle("Fusion")
-app.setWindowIcon(QtGui.QIcon('icons/add_black.png'))
+app.setWindowIcon(QtGui.QIcon('icons/pybrowser_icon.jpg'))
 
 #styling tthe app
 app.setStyleSheet("""
@@ -26,7 +26,7 @@ app.setStyleSheet("""
 		padding: 5px;
 		background-color: #2196F3;
 		color: white;
-	}
+	}	
 	QMainWindow{
 		background-color: #31302f;
 		border-radius: 10px;
