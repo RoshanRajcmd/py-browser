@@ -1,6 +1,8 @@
-# <img src="https://github.com/user-attachments/assets/15fa2d4a-b4e2-4616-9347-350f9c39ec04" alt="pybrowser_icon" style="width:70px; height:70px;"> PyBrowser
+# PyBrowser
 
 A Web Browser written in Python using the GUI framework PyQt5.
+
+<img src="https://github.com/user-attachments/assets/15fa2d4a-b4e2-4616-9347-350f9c39ec04" alt="pybrowser_icon" style="width:70px; height:70px;">
 
 ## ⚙️ Source Code
 
@@ -19,7 +21,7 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 4. Repositioning Tabs
 5. Can access and render applications running in localhost ports
 6. Bookmark functionality with customizability in Home page and New tab URL
-7. Json serialization and desrialization of bookmarks
+7. Json serialization and deserialization of bookmarks
 
 ## 🧑‍💻 Developer setup
 
