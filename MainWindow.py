@@ -17,6 +17,9 @@ class MainWindow(QMainWindow):
 	def __init__(self, *args, **kwargs):
 		super(MainWindow, self).__init__(*args, **kwargs)
 
+		#Load in all the bookmarks
+		self.bookmarks = self.load_bookmarks()
+
 		# creating a QTabWidget
 		self.tabs = QTabWidget()
 		self.tabs.setDocumentMode(True)
@@ -168,9 +171,6 @@ class MainWindow(QMainWindow):
 		# adding this tool bar tot he main window
 		self.addToolBar(nav_bar)
 
-		#Load in all the bookmarks
-		self.bookmarks = self.load_bookmarks()
-
 		# showing all the components
 		self.show()
 
@@ -201,6 +201,7 @@ class MainWindow(QMainWindow):
 		self.loading_icon = QIcon('icons/loading_black.gif')
 		self.tabs.setTabIcon(i, self.loading_icon)
 
+	#update the page title ad favicon from the page it got loaded
 	def update_tab_title_and_icon(self, i, curr_tab):
 		page = curr_tab.page()
 		icon = page.icon()
