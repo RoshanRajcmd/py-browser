@@ -50,7 +50,6 @@ class MainWindow(QMainWindow):
 
 		self.new_tab_button.clicked.connect(lambda _: self.add_new_tab())
 		self.tabs.setCornerWidget(self.new_tab_button, Qt.TopRightCorner)
-		self.tabs.currentChanged.connect(self.current_tab_changed)
 		self.tabs.tabCloseRequested.connect(self.close_current_tab)
 		self.tabs.setStyleSheet("""
 			# do not put the below style along with some other styles
@@ -172,6 +171,10 @@ class MainWindow(QMainWindow):
 		# adding this tool bar tot he main window
 		self.addToolBar(nav_bar)
 
+		# Connect the currentChanged signal after url_bar is defined
+		# The below line need to be here else the method current_tab_changed cannot recognize the self.url_bar of the MainWindow
+		self.tabs.currentChanged.connect(self.current_tab_changed)
+
 		# showing all the components
 		self.show()
 
@@ -229,8 +232,8 @@ class MainWindow(QMainWindow):
 		# print(qurl.toString())  # Debugging statement removed
 		if curr_tab != self.tabs.currentWidget():
 			return
-		#self.urlBar.setText(qurl.toString())
-		#self.urlBar.setCursorPosition(0)
+		self.url_bar.setText(qurl.toString())
+		self.url_bar.setCursorPosition(0)
 
 	# method called by the home action
 	def navigate_home(self):
