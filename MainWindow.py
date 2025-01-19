@@ -299,7 +299,9 @@ class MainWindow(QMainWindow):
 			bookmark = {'title': title, 'url': url}
 			self.bookmarks.append(bookmark)
 			self.save_bookmark()
-			self.bookmark_btn = QPushButton(QIcon('icons/star_white'), None, self)
+			# self.bookmark_btn = QPushButton(QIcon('icons/star_white'), None, self)
+			# self.bookmark_btn.repaint()
+			self.check_change_bookmark_icon(web_view.url())
 		elif dialog.exec_() == QDialog.Rejected:
 			return
 
