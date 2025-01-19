@@ -58,17 +58,8 @@ class MainWindow(QMainWindow):
 			}
 		""")
 
-		# creating a new tab
-		self.add_new_tab(QUrl(HOME_URL), 'Homepage')
-
 		# set this tabs as central widget or main window
 		self.setCentralWidget(self.tabs)
-
-		# creating a status bar object
-		self.status = QStatusBar()
-
-		# adding status bar to the main window
-		self.setStatusBar(self.status)
 
 		# creating QToolBar for navigation
 		nav_bar = QToolBar("Navigation")
@@ -145,7 +136,14 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		nav_bar.addWidget(self.url_bar)
 
-		self.bookmark_btn = QPushButton(QIcon('icons/star_black'), None, self)
+		self.bookmark_btn = QPushButton(None, self)
+		self.bookmark_btn.setStyleSheet("""
+			QPushButton{
+				background-color: #ffffff;
+				border-radius: 5px;	
+			}				  
+		""")
+		self.check_change_bookmark_icon(None)
 		self.bookmark_btn.setStatusTip("Bookmark Page")
 		self.bookmark_btn.clicked.connect(self.add_bookmark)
 		self.bookmark_btn.setIconSize(QSize(30, 30))
@@ -171,9 +169,19 @@ class MainWindow(QMainWindow):
 		# adding this tool bar tot he main window
 		self.addToolBar(nav_bar)
 
+		# creating a status bar object
+		self.status = QStatusBar()
+		# adding status bar to the main window
+		self.setStatusBar(self.status)
+
+ 		# Do not change the order of the below lines - Let it be as it is
+		 
 		# Connect the currentChanged signal after url_bar is defined
 		# The below line need to be here else the method current_tab_changed cannot recognize the self.url_bar of the MainWindow
 		self.tabs.currentChanged.connect(self.current_tab_changed)
+
+		# creating a new tab
+		self.add_new_tab(QUrl(HOME_URL), 'Homepage')
 
 		# showing all the components
 		self.show()
@@ -199,6 +207,7 @@ class MainWindow(QMainWindow):
 		new_tab.loadFinished.connect(lambda _, i=i, new_tab=new_tab: self.update_tab_title_and_icon(i, new_tab))
 		new_tab.iconChanged.connect(lambda icon, i=i: self.tabs.setTabIcon(i, icon))
 		self.update_title()
+		self.check_change_bookmark_icon(qurl)
 
 	#Sets Loading icon when the page is loading
 	def update_tab_loading_icon(self, i):
@@ -213,11 +222,14 @@ class MainWindow(QMainWindow):
 		self.tabs.setTabText(i, title)
 		self.tabs.setTabIcon(i, icon)
 		self.update_title()
+		self.check_change_bookmark_icon(page.url())
 
 	def current_tab_changed(self):
 		qurl = self.tabs.currentWidget().url()
 		self.update_url_bar(qurl, self.tabs.currentWidget())
 		self.update_title()
+		self.check_change_bookmark_icon(qurl)
+		self.bookmark_btn.repaint()
 
 	# method for updating the title of the window
 	def update_title(self):
@@ -246,6 +258,7 @@ class MainWindow(QMainWindow):
 		if qurl.scheme() == "":
 			qurl.setScheme("http")
 		self.tabs.currentWidget().setUrl(qurl)
+		self.check_change_bookmark_icon(qurl)
 
 	def show_more_actions(self):
 		dialog = ActionsDialog(self, self)
@@ -286,6 +299,7 @@ class MainWindow(QMainWindow):
 			bookmark = {'title': title, 'url': url}
 			self.bookmarks.append(bookmark)
 			self.save_bookmark()
+			self.bookmark_btn = QPushButton(QIcon('icons/star_white'), None, self)
 		elif dialog.exec_() == QDialog.Rejected:
 			return
 
@@ -293,3 +307,20 @@ class MainWindow(QMainWindow):
 		# Save the bookmarks to the file
 		with open(BOOKMARK_FILE, 'w') as file:
 			json.dump(self.bookmarks, file, indent=4)
+
+	def check_change_bookmark_icon(self, qurl):
+		# Check if the current page URL is one of the URLs in bookmarks.json file
+		if qurl is None:
+			self.bookmark_btn.setIcon(QIcon('icons/star_black'))
+			# Refresh the button to apply the change
+			self.bookmark_btn.repaint()
+			return
+		
+		for bookmark in self.bookmarks:
+			if bookmark['url'] == qurl.toString():
+				self.bookmark_btn.setIcon(QIcon('icons/star_white'))
+				self.bookmark_btn.repaint()
+				break
+		else:
+			self.bookmark_btn.setIcon(QIcon('icons/star_black'))
+			self.bookmark_btn.repaint()  

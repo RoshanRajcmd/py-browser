@@ -1,11 +1,11 @@
 [
     {
         "title": "home_tab_title",
-        "url": "http://www.google.com"
+        "url": "https://www.google.com/"
     },
     {
         "title": "new_tab_title",
-        "url": "http://www.google.com"
+        "url": "https://www.google.com/"
     },
     {
         "title": "Take a look at my profile - RoshanRajcmd",
@@ -14,5 +14,9 @@
     {
         "title": "Check out my other Projects - RoshanRajcmd",
         "url": "https://github.com/RoshanRajcmd?tab=repositories"
+    },
+    {
+        "title": "YouTube",
+        "url": "https://www.youtube.com/"
     }
 ]
