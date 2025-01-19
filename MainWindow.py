@@ -286,9 +286,9 @@ class MainWindow(QMainWindow):
 		if web_view and web_view.url().toString() and web_view.page().title():
 			dialog = BookmarkDialog(web_view.page().title(), web_view.url().toString(), self)
 
-		#postion the dialog near its parent button
-		buttons_pos = self.bookmark_btn.mapToGlobal(self.bookmark_btn.rect().bottomLeft())
-		dialog.move(buttons_pos)
+			#postion the dialog near its parent button
+			buttons_pos = self.bookmark_btn.mapToGlobal(self.bookmark_btn.rect().bottomLeft())
+			dialog.move(buttons_pos)
 
 		#if the dialog executed 
 		if dialog.exec_() == QDialog.Accepted:
