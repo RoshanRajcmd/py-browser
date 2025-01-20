@@ -15,13 +15,15 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 
 ## 🎛️ Features
 
-1. Basic navigation functionality and widgets
-2. Tabs functionality with reloading icon and favicons
-3. The tab tile and window title will be changed to the current page it is on
-4. Repositioning Tabs
-5. Can access and render applications running in localhost ports
-6. Bookmark functionality with customizability in Home page and New tab URL
-7. Json serialization and deserialization of bookmarks
+1. Basic navigation functionality and widgets like Forward, Backward, Refresh, and Cancel loading.
+2. Tabs functionality with reloading icon and favicons when the page is loading and when loaded.
+3. The tab tile and window title will be changed to the current page it is on.
+4. Can reposition Tabs.
+5. Can access and render applications running in localhost ports.
+6. Bookmark a Page functionality.
+8. Json serialization of bookmarks so that even when the application is closed bookmarks still get stored
+9. Customize your Home page and New tab URL.
+10. Edit and Delete a BookMark.
 
 ## 🧑‍💻 Developer setup
 
@@ -31,7 +33,7 @@ Install Python3 and pip3 to install PyQt5 and set their bin paths as the interpr
 
 ## Note
 
-The Use of frameworks comes with disadvantages that is there in this project, like...
+The Use of frameworks comes with disadvantages in this project, like...
 
 * The Maps will not load
 * Downloading is not an option
@@ -44,7 +46,7 @@ These issues will be fixed in the future
 
 
 <img width="1469" alt="Screenshot 2025-01-18 at 5 23 39 PM" src="https://github.com/user-attachments/assets/c7cf1717-3d4e-4889-80a4-f44ea6e23d5f" />
-<img width="1469" alt="Screenshot 2025-01-18 at 5 24 14 PM" src="https://github.com/user-attachments/assets/bf559886-4768-471d-b64a-1a4f5bd73ac3" />
-<img width="1469" alt="Screenshot 2025-01-18 at 5 24 32 PM" src="https://github.com/user-attachments/assets/5d25207b-eac5-4938-81ec-28b325529e89" />
-
+<img width="1469" alt="Screenshot 2025-01-20 at 3 05 48 PM" src="https://github.com/user-attachments/assets/3a6429bf-dde7-438a-9bf8-617d4e0a5097" />
+<img width="1469" alt="Screenshot 2025-01-20 at 3 06 20 PM" src="https://github.com/user-attachments/assets/bd746149-af46-43df-aca0-6f8a32cffe22" />
+<img width="1469" alt="Screenshot 2025-01-20 at 3 06 57 PM" src="https://github.com/user-attachments/assets/395928da-22e6-4dce-8d34-e2a729196b76" />
 
