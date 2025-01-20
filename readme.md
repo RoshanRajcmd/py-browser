@@ -15,13 +15,15 @@ Project: [py-browser](https://github.com/RoshanRajcmd/py-browser)
 
 ## 🎛️ Features
 
-1. Basic navigation functionality and widgets
-2. Tabs functionality with reloading icon and favicons
-3. The tab tile and window title will be changed to the current page it is on
-4. Repositioning Tabs
-5. Can access and render applications running in localhost ports
-6. Bookmark functionality with customizability in Home page and New tab URL
-7. Json serialization and deserialization of bookmarks
+1. Basic navigation functionality and widgets like Forward, Backward, Refresh, and Cancel loading.
+2. Tabs functionality with reloading icon and favicons when the page is loading and when loaded.
+3. The tab tile and window title will be changed to the current page it is on.
+4. Can reposition Tabs.
+5. Can access and render applications running in localhost ports.
+6. Bookmark a Page functionality.
+8. Json serialization of bookmarks so that even when the application is closed bookmarks still get stored
+9. Customize your Home page and New tab URL.
+10. Edit and Delete a BookMark.
 
 ## 🧑‍💻 Developer setup
 
@@ -31,7 +33,7 @@ Install Python3 and pip3 to install PyQt5 and set their bin paths as the interpr
 
 ## Note
 
-The Use of frameworks comes with disadvantages that is there in this project, like...
+The Use of frameworks comes with disadvantages in this project, like...
 
 * The Maps will not load
 * Downloading is not an option
