@@ -1,8 +1,7 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog, QMenu, QAction, QVBoxLayout
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize
-from ActionsDialog import ActionsDialog
 from BookmarkDialog import BookmarkDialog
 from SelectableLineEdit import SelectableLineEdit
 from utils import load_urls_from_bookmarks, BOOKMARK_FILE, HOME_TAB, NEW_TAB, GOOGLE
@@ -152,7 +151,11 @@ class MainWindow(QMainWindow):
 
 		self.action_btn = QPushButton(QIcon('icons/menu_black'), None, self)
 		self.action_btn.setStatusTip("More Action")
-		self.action_btn.clicked.connect(self.show_more_actions)
+		self.menu = QMenu(self)
+		self.show_all_bookmark = QAction("Show All Bookmarks" ,self)
+		self.show_all_bookmark.triggered.connect(self.view_bookmarks_in_tab)
+		self.menu.addAction(self.show_all_bookmark)
+		self.action_btn.setMenu(self.menu)
 		self.action_btn.setIconSize(QSize(30, 30))
 		self.action_btn.setFixedSize(self.action_btn.iconSize())
 		nav_bar.addWidget(self.action_btn)
@@ -260,14 +263,6 @@ class MainWindow(QMainWindow):
 		self.tabs.currentWidget().setUrl(qurl)
 		self.check_change_bookmark_icon(qurl)
 
-	def show_more_actions(self):
-		dialog = ActionsDialog(self, self)
-		#Position the dialog near the button
-		buttonPos = self.action_btn.mapToGlobal(self.action_btn.rect().bottomLeft())
-		dialog.move(buttonPos)
-		#Show the dialog
-		dialog.exec_()
-
 	def load_bookmarks(self):
 		if not os.path.exists(BOOKMARK_FILE):
 			with open(BOOKMARK_FILE, 'w') as file:
@@ -326,3 +321,29 @@ class MainWindow(QMainWindow):
 		else:
 			self.bookmark_btn.setIcon(QIcon('icons/star_black'))
 			self.bookmark_btn.repaint()  
+	
+	def view_bookmarks_in_tab(self):
+		dialog = QDialog(self)
+		dialog.setWindowTitle("Bookmarks")
+		layout = QVBoxLayout()
+
+		for bookmark in self.bookmarks:
+			button = QPushButton(bookmark['title'])
+			button.setStyleSheet("""
+			QPushButton {
+				border-radius: 5px;
+				background-color: #6E6E6D;
+				padding: 3px;
+			}
+			QPushButton:hover{
+				background-color: #1E88E5;
+			}
+			""")
+			button.clicked.connect(lambda checked, url=bookmark['url']: self.open_bookmark(url))
+			layout.addWidget(button)
+
+		dialog.setLayout(layout)
+		dialog.exec_()
+
+	def open_bookmark(self, url):
+		self.add_new_tab(QUrl(url))
