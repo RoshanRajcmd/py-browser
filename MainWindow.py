@@ -1,8 +1,7 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog, QMenu, QAction, QVBoxLayout
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize
-from ActionsDialog import ActionsDialog
 from BookmarkDialog import BookmarkDialog
 from SelectableLineEdit import SelectableLineEdit
 from utils import load_urls_from_bookmarks, BOOKMARK_FILE, HOME_TAB, NEW_TAB, GOOGLE
@@ -58,17 +57,8 @@ class MainWindow(QMainWindow):
 			}
 		""")
 
-		# creating a new tab
-		self.add_new_tab(QUrl(HOME_URL), 'Homepage')
-
 		# set this tabs as central widget or main window
 		self.setCentralWidget(self.tabs)
-
-		# creating a status bar object
-		self.status = QStatusBar()
-
-		# adding status bar to the main window
-		self.setStatusBar(self.status)
 
 		# creating QToolBar for navigation
 		nav_bar = QToolBar("Navigation")
@@ -145,7 +135,14 @@ class MainWindow(QMainWindow):
 		# adding this to the tool bar
 		nav_bar.addWidget(self.url_bar)
 
-		self.bookmark_btn = QPushButton(QIcon('icons/star_black'), None, self)
+		self.bookmark_btn = QPushButton(None, self)
+		self.bookmark_btn.setStyleSheet("""
+			QPushButton{
+				background-color: #ffffff;
+				border-radius: 5px;	
+			}				  
+		""")
+		self.check_change_bookmark_icon(None)
 		self.bookmark_btn.setStatusTip("Bookmark Page")
 		self.bookmark_btn.clicked.connect(self.add_bookmark)
 		self.bookmark_btn.setIconSize(QSize(30, 30))
@@ -154,7 +151,11 @@ class MainWindow(QMainWindow):
 
 		self.action_btn = QPushButton(QIcon('icons/menu_black'), None, self)
 		self.action_btn.setStatusTip("More Action")
-		self.action_btn.clicked.connect(self.show_more_actions)
+		self.menu = QMenu(self)
+		self.show_all_bookmark = QAction("Show All Bookmarks" ,self)
+		self.show_all_bookmark.triggered.connect(self.view_bookmarks_in_tab)
+		self.menu.addAction(self.show_all_bookmark)
+		self.action_btn.setMenu(self.menu)
 		self.action_btn.setIconSize(QSize(30, 30))
 		self.action_btn.setFixedSize(self.action_btn.iconSize())
 		nav_bar.addWidget(self.action_btn)
@@ -171,9 +172,19 @@ class MainWindow(QMainWindow):
 		# adding this tool bar tot he main window
 		self.addToolBar(nav_bar)
 
+		# creating a status bar object
+		self.status = QStatusBar()
+		# adding status bar to the main window
+		self.setStatusBar(self.status)
+
+ 		# Do not change the order of the below lines - Let it be as it is
+		 
 		# Connect the currentChanged signal after url_bar is defined
 		# The below line need to be here else the method current_tab_changed cannot recognize the self.url_bar of the MainWindow
 		self.tabs.currentChanged.connect(self.current_tab_changed)
+
+		# creating a new tab
+		self.add_new_tab(QUrl(HOME_URL), 'Homepage')
 
 		# showing all the components
 		self.show()
@@ -199,6 +210,7 @@ class MainWindow(QMainWindow):
 		new_tab.loadFinished.connect(lambda _, i=i, new_tab=new_tab: self.update_tab_title_and_icon(i, new_tab))
 		new_tab.iconChanged.connect(lambda icon, i=i: self.tabs.setTabIcon(i, icon))
 		self.update_title()
+		self.check_change_bookmark_icon(qurl)
 
 	#Sets Loading icon when the page is loading
 	def update_tab_loading_icon(self, i):
@@ -213,11 +225,14 @@ class MainWindow(QMainWindow):
 		self.tabs.setTabText(i, title)
 		self.tabs.setTabIcon(i, icon)
 		self.update_title()
+		self.check_change_bookmark_icon(page.url())
 
 	def current_tab_changed(self):
 		qurl = self.tabs.currentWidget().url()
 		self.update_url_bar(qurl, self.tabs.currentWidget())
 		self.update_title()
+		self.check_change_bookmark_icon(qurl)
+		self.bookmark_btn.repaint()
 
 	# method for updating the title of the window
 	def update_title(self):
@@ -246,14 +261,7 @@ class MainWindow(QMainWindow):
 		if qurl.scheme() == "":
 			qurl.setScheme("http")
 		self.tabs.currentWidget().setUrl(qurl)
-
-	def show_more_actions(self):
-		dialog = ActionsDialog(self, self)
-		#Position the dialog near the button
-		buttonPos = self.action_btn.mapToGlobal(self.action_btn.rect().bottomLeft())
-		dialog.move(buttonPos)
-		#Show the dialog
-		dialog.exec_()
+		self.check_change_bookmark_icon(qurl)
 
 	def load_bookmarks(self):
 		if not os.path.exists(BOOKMARK_FILE):
@@ -273,10 +281,6 @@ class MainWindow(QMainWindow):
 		if web_view and web_view.url().toString() and web_view.page().title():
 			dialog = BookmarkDialog(web_view.page().title(), web_view.url().toString(), self)
 
-		#postion the dialog near its parent button
-		buttons_pos = self.bookmark_btn.mapToGlobal(self.bookmark_btn.rect().bottomLeft())
-		dialog.move(buttons_pos)
-
 		#if the dialog executed 
 		if dialog.exec_() == QDialog.Accepted:
 			title, url = dialog.get_input()
@@ -286,6 +290,9 @@ class MainWindow(QMainWindow):
 			bookmark = {'title': title, 'url': url}
 			self.bookmarks.append(bookmark)
 			self.save_bookmark()
+			# self.bookmark_btn = QPushButton(QIcon('icons/star_white'), None, self)
+			# self.bookmark_btn.repaint()
+			self.check_change_bookmark_icon(web_view.url())
 		elif dialog.exec_() == QDialog.Rejected:
 			return
 
@@ -293,3 +300,46 @@ class MainWindow(QMainWindow):
 		# Save the bookmarks to the file
 		with open(BOOKMARK_FILE, 'w') as file:
 			json.dump(self.bookmarks, file, indent=4)
+
+	def check_change_bookmark_icon(self, qurl):
+		# Check if the current page URL is one of the URLs in bookmarks.json file
+		if qurl is None:
+			self.bookmark_btn.setIcon(QIcon('icons/star_black'))
+			# Refresh the button to apply the change
+			self.bookmark_btn.repaint()
+			return
+		
+		for bookmark in self.bookmarks:
+			if bookmark['url'] == qurl.toString():
+				self.bookmark_btn.setIcon(QIcon('icons/star_white'))
+				self.bookmark_btn.repaint()
+				break
+		else:
+			self.bookmark_btn.setIcon(QIcon('icons/star_black'))
+			self.bookmark_btn.repaint()  
+	
+	def view_bookmarks_in_tab(self):
+		dialog = QDialog(self)
+		dialog.setWindowTitle("Bookmarks")
+		layout = QVBoxLayout()
+
+		for bookmark in self.bookmarks:
+			button = QPushButton(bookmark['title'])
+			button.setStyleSheet("""
+			QPushButton {
+				border-radius: 5px;
+				background-color: #6E6E6D;
+				padding: 3px;
+			}
+			QPushButton:hover{
+				background-color: #1E88E5;
+			}
+			""")
+			button.clicked.connect(lambda checked, url=bookmark['url']: self.open_bookmark(url))
+			layout.addWidget(button)
+
+		dialog.setLayout(layout)
+		dialog.exec_()
+
+	def open_bookmark(self, url):
+		self.add_new_tab(QUrl(url))
