@@ -8,6 +8,7 @@ class BookmarkDialog(QDialog):
 
         # Set up dialog properties
         self.setWindowTitle("Add Bookmark")
+        self.setWindowModality(Qt.WindowModal)
 
         # Create the form layout
         self.form_layout = QFormLayout()
@@ -24,6 +25,7 @@ class BookmarkDialog(QDialog):
             background-color: black;
             font-size: 14px;
             color: white;
+            width: 250px;
             }
             QLineEdit:focus{
             border: 2px solid #1E88E5;
@@ -36,6 +38,7 @@ class BookmarkDialog(QDialog):
             background-color: black;
             font-size: 14px;
             color: white;
+            width: 250px;
             }
             QLineEdit:focus{
             border: 2px solid #1E88E5;
