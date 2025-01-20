@@ -1,5 +1,5 @@
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QMainWindow, QStatusBar, QToolBar, QTabWidget, QToolButton, QPushButton, QDialog, QMenu, QAction, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QStatusBar, QTabWidget, QToolButton, QApplication
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, Qt, QSize
 from NavBar import NavBar
@@ -13,8 +13,10 @@ HOME_URL, NEW_TAB_DEFAULT_URL = load_urls_from_bookmarks()
 class MainWindow(QMainWindow):
 
 	# constructor
-	def __init__(self, *args, **kwargs):
+	def __init__(self, app, *args, **kwargs):
 		super(MainWindow, self).__init__(*args, **kwargs)
+
+		self.app = app
 
 		#Load in all the bookmarks
 		self.bookmarks = self.load_bookmarks()
@@ -84,11 +86,11 @@ class MainWindow(QMainWindow):
 		self.show()
 
 	def close_current_tab(self, i):
-		if self.tabs.count() < 2:
-			self.close()
+		if self.tabs.count() <= 1:
+			#quit via the App instance
+			self.app.quit()
 			return
 		self.tabs.removeTab(i)
-		#TODO - When the last tab is closed, close the entier application
 
 	def add_new_tab(self, qurl=None, label="Blank"):
 		if qurl is None:
@@ -123,6 +125,8 @@ class MainWindow(QMainWindow):
 		self.nav_bar.check_change_bookmark_icon(page.url())
 
 	def current_tab_changed(self):
+		if self.tabs.count() == 0:
+			return
 		qurl = self.tabs.currentWidget().url()
 		self.update_url_bar(qurl, self.tabs.currentWidget())
 		self.update_title()
