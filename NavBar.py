@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize, QUrl
 from SelectableLineEdit import SelectableLineEdit
 from BookmarkDialog import BookmarkDialog
+from BookmarkBar import BookmarkBar
 import json
 from utils import BOOKMARK_FILE
 
@@ -101,7 +102,7 @@ class NavBar(QToolBar):
         self.action_btn.setStatusTip("More Action")
         self.menu = QMenu(self)
         self.show_all_bookmark = QAction("Show All Bookmarks" ,self)
-        self.show_all_bookmark.triggered.connect(self.view_bookmarks_in_tab)
+        self.show_all_bookmark.triggered.connect(self.view_bookmarks_in_dialog)
         self.menu.addAction(self.show_all_bookmark)
         self.action_btn.setMenu(self.menu)
         self.action_btn.setIconSize(QSize(30, 30))
@@ -146,37 +147,31 @@ class NavBar(QToolBar):
             bookmark = {'title': title, 'url': url}
             self.mainWindow.bookmarks.append(bookmark)
             self.save_bookmark()
-            # self.bookmark_btn = QPushButton(QIcon('icons/star_white'), None, self)
-            # self.bookmark_btn.repaint()
             self.check_change_bookmark_icon(web_view.url())
         elif dialog.exec_() == QDialog.Rejected:
             return
 
-    def view_bookmarks_in_tab(self):
-        dialog = QDialog(self)
-        dialog.setWindowTitle("Bookmarks")
+    def delete_bookmark(self, url):
+        # Find the bookmark with the given URL and remove it
+        self.mainWindow.bookmarks = [bookmark for bookmark in self.mainWindow.bookmarks if bookmark['url'] != url]
+        self.save_bookmark()
+        print(f"Bookmark deleted: URL = {url}")
+        self.check_change_bookmark_icon(QUrl(url))
+        # Reload the dialog to reflect changes
+        self.view_bookmarks_in_dialog()  
+
+    def view_bookmarks_in_dialog(self):
+        self.bookmark_dialog = QDialog(self)
+        self.bookmark_dialog.setWindowTitle("Bookmarks")
         layout = QVBoxLayout()
 
         for bookmark in self.mainWindow.bookmarks:
-            button = QPushButton(bookmark['title'])
-            button.setStyleSheet("""
-            QPushButton {
-                border-radius: 5px;
-                background-color: #6E6E6D;
-                padding: 3px;
-            }
-            QPushButton:hover{
-                background-color: #1E88E5;
-            }
-            """)
-            button.clicked.connect(lambda checked, url=bookmark['url']: self.open_bookmark(url))
-            layout.addWidget(button)
+            bookmark_bar = BookmarkBar(self.mainWindow, bookmark['title'], bookmark['url'], self)
+            layout.addWidget(bookmark_bar)
 
-        dialog.setLayout(layout)
-        dialog.exec_()
-
-    def open_bookmark(self, url):
-        self.mainWindow.add_new_tab(QUrl(url))
+        self.bookmark_dialog.setLayout(layout)
+        self.bookmark_dialog.adjustSize()
+        self.bookmark_dialog.exec_()
 
     def check_change_bookmark_icon(self, qurl):
         # Check if the current page URL is one of the URLs in bookmarks.json file
@@ -198,4 +193,4 @@ class NavBar(QToolBar):
     def save_bookmark(self):
         # Save the bookmarks to the file
         with open(BOOKMARK_FILE, 'w') as file:
-            json.dump(self.mainWindow.bookmarks, file, indent=4) 
+            json.dump(self.mainWindow.bookmarks, file, indent=4)

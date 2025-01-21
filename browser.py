@@ -26,7 +26,7 @@ app.setStyleSheet("""
 		padding: 5px;
 		background-color: #2196F3;
 		color: white;
-	}	D
+	}
 	QMainWindow{
 		background-color: #31302f;
 		border-radius: 10px;
