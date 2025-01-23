@@ -26,7 +26,7 @@ app.setStyleSheet("""
 		padding: 5px;
 		background-color: #2196F3;
 		color: white;
-	}	
+	}
 	QMainWindow{
 		background-color: #31302f;
 		border-radius: 10px;
@@ -34,7 +34,7 @@ app.setStyleSheet("""
 """)
 
 # creating a main window object
-window = MainWindow()
+window = MainWindow(app)
 
 # loop
 app.exec_()
