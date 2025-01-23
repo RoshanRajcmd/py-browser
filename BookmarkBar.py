@@ -101,7 +101,7 @@ class BookmarkBar(QToolBar):
 
         # Update the bookmark in the main window
         for bookmark in self.mainWindow.bookmarks:
-            if bookmark['url'] == self.url:
+            if bookmark['url'] == self.url and bookmark['title'] == self.title:
                 bookmark['title'] = new_title
                 bookmark['url'] = new_url
                 break

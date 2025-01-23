@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize, QUrl
 from SelectableLineEdit import SelectableLineEdit
 from BookmarkDialog import BookmarkDialog
-from BookmarkBar import BookmarkBar
+from ShowBookmarksDialog import ShowBookmarksDialog
 import json
 from utils import BOOKMARK_FILE
 
@@ -157,20 +157,10 @@ class NavBar(QToolBar):
         self.save_bookmark()
         print(f"Bookmark deleted: URL = {url}")
         self.check_change_bookmark_icon(QUrl(url))
-        # Reload the dialog to reflect changes
-        self.view_bookmarks_in_dialog()  
+        self.render_show_bookmarks_dialog()
 
     def view_bookmarks_in_dialog(self):
-        self.bookmark_dialog = QDialog(self)
-        self.bookmark_dialog.setWindowTitle("Bookmarks")
-        layout = QVBoxLayout()
-
-        for bookmark in self.mainWindow.bookmarks:
-            bookmark_bar = BookmarkBar(self.mainWindow, bookmark['title'], bookmark['url'], self)
-            layout.addWidget(bookmark_bar)
-
-        self.bookmark_dialog.setLayout(layout)
-        self.bookmark_dialog.adjustSize()
+        self.bookmark_dialog = ShowBookmarksDialog(self.mainWindow, self)
         self.bookmark_dialog.exec_()
 
     def check_change_bookmark_icon(self, qurl):
@@ -194,3 +184,8 @@ class NavBar(QToolBar):
         # Save the bookmarks to the file
         with open(BOOKMARK_FILE, 'w') as file:
             json.dump(self.mainWindow.bookmarks, file, indent=4)
+
+    def render_show_bookmarks_dialog(self):
+        # Reload the dialog to reflect changes by closing the closing the existing dialog and opening a new instance
+        self.bookmark_dialog.close()
+        self.view_bookmarks_in_dialog()
