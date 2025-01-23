@@ -47,6 +47,7 @@ These issues will be fixed in the future
 
 <img width="1469" alt="Screenshot 2025-01-18 at 5 23 39 PM" src="https://github.com/user-attachments/assets/c7cf1717-3d4e-4889-80a4-f44ea6e23d5f" />
 <img width="1469" alt="Screenshot 2025-01-20 at 3 05 48 PM" src="https://github.com/user-attachments/assets/3a6429bf-dde7-438a-9bf8-617d4e0a5097" />
-<img width="1469" alt="Screenshot 2025-01-20 at 3 06 20 PM" src="https://github.com/user-attachments/assets/bd746149-af46-43df-aca0-6f8a32cffe22" />
+<img width="1469" alt="Screenshot 2025-01-23 at 10 35 00 PM" src="https://github.com/user-attachments/assets/b6b48c18-eb04-423e-837a-901e6a9d6a50" />
+<img width="1469" alt="Screenshot 2025-01-23 at 10 35 21 PM" src="https://github.com/user-attachments/assets/7471d7fd-078f-4755-ab8d-667f2edaf6cb" />
 <img width="1469" alt="Screenshot 2025-01-20 at 3 06 57 PM" src="https://github.com/user-attachments/assets/395928da-22e6-4dce-8d34-e2a729196b76" />
 
